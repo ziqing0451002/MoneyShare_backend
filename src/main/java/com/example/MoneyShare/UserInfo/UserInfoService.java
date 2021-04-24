@@ -88,7 +88,6 @@ public class UserInfoService {
             throw new IllegalStateException("暱稱不得為空");
         }else{
             userInfo.setUserName(userName);
-
         }
     }
 

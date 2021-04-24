@@ -30,15 +30,17 @@ public class UserInfo {
     private String userAccount;
     private String userPassword;
     private String userName;
+    private String userPhoneNumber;
 
 
     public UserInfo(){
 
     }
-    public UserInfo(String userAccount,String userPassword,String userName){
+    public UserInfo(String userAccount,String userPassword,String userName,String userPhoneNumber){
         this.userAccount = userAccount;
         this.userPassword = userPassword;
         this.userName = userName;
+        this.userPhoneNumber = userPhoneNumber;
     }
 
     public String getUserAccount() {
@@ -65,12 +67,21 @@ public class UserInfo {
         this.userName = userName;
     }
 
+    public String getUserPhoneNumber() {
+        return userPhoneNumber;
+    }
+
+    public void setUserPhoneNumber(String userPhoneNumber) {
+        this.userPhoneNumber = userPhoneNumber;
+    }
+
     @Override
     public String toString(){
         return "UserInfo{" +
                 "userAccount=" + userAccount + '\'' +
                 ", userPassword='" + userPassword + '\'' +
                 ", userName='" + userName + '\'' +
+                ", userPhoneNumber='" + userPhoneNumber + '\'' +
                 '}';
     }
 }
