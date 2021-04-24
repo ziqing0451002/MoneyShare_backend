@@ -1,0 +1,96 @@
+package com.example.MoneyShare.UserInfo;
+
+import com.example.MoneyShare.CommentModel.Encoder_MD5;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Objects;
+
+@Service
+public class UserInfoService {
+
+    private final UserInfoRepository userInfoRepository;
+//    private final Encoder_MD5 encoder_md5;
+
+
+    @Autowired
+    public UserInfoService(UserInfoRepository userInfoRepository, Encoder_MD5 encoder_md5) {
+        this.userInfoRepository = userInfoRepository;
+//        this.encoder_md5 = encoder_md5;
+    }
+
+    public List<UserInfo> getUserInfo(){
+        return userInfoRepository.findAll();
+    }
+
+    public boolean userLogin(String  userAccount, String  userPassword){
+        UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
+                () -> new IllegalStateException("userAccount:" + userAccount + "不存在")
+        );
+        if ( !Objects.equals(userInfo.getUserPassword(),userPassword)){
+            throw new IllegalStateException("密碼錯誤");
+        }else{
+            return true;
+        }
+    }
+
+    public void addUser(UserInfo userInfo){
+        boolean exists = userInfoRepository.existsById(userInfo.getUserAccount());
+        if (exists){
+            throw new IllegalStateException("userAccount:" + userInfo.getUserAccount() + "已被使用");
+        }else {
+            userInfoRepository.save(userInfo);
+        }
+
+    }
+
+    public void deletUser(String  userAccount){
+        boolean exists = userInfoRepository.existsById(userAccount);
+        if (!exists){
+            throw new IllegalStateException("userAccount:" + userAccount + "不存在");
+        }
+        userInfoRepository.deleteById(userAccount);
+    }
+
+    @Transactional
+    public void updatePassword(String userAccount,String originalUserPassword,String newUserPassword){
+        UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
+                () -> new IllegalStateException("userAccount:" + userAccount + "不存在")
+        );
+
+        //新密碼不為空，不與先前密碼相同
+        if ( !Objects.equals(userInfo.getUserPassword(),originalUserPassword)){
+            throw new IllegalStateException("密碼錯誤");
+        }else if (newUserPassword == null || newUserPassword.length() <= 0){
+            throw new IllegalStateException("新密碼不得為空");
+        }else if (Objects.equals(userInfo.getUserPassword(),newUserPassword)){
+            throw new IllegalStateException("新密碼不得與舊密碼相同");
+        }else {
+            userInfo.setUserPassword(newUserPassword);
+
+        }
+//        if (Objects.equals(userInfo.getUserPassword(),originalUserPassword)
+//                && newUserPassword != null
+//                && newUserPassword.length() > 0
+//                && !Objects.equals(userInfo.getUserPassword(),newUserPassword)){
+//            userInfo.setUserPassword(newUserPassword);
+//        }
+    }
+    @Transactional
+    public void updateName(String userAccount,String userName){
+        UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
+                () -> new IllegalStateException("userAccount:" + userAccount + "不存在")
+        );
+
+        if (userName == null || userName.length() <= 0){
+            throw new IllegalStateException("暱稱不得為空");
+        }else{
+            userInfo.setUserName(userName);
+
+        }
+    }
+
+
+}
