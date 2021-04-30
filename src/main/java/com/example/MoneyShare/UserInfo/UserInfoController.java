@@ -28,8 +28,9 @@ public class UserInfoController {
     }
 
     @DeleteMapping(path = "deletUser/{userAccount}")
-    public void deletUser(@PathVariable("userAccount") String userAccount){
-        userInfoService.deletUser(userAccount);
+    public void deletUser(@PathVariable("userAccount") String userAccount,
+                          @RequestParam String userPassword){
+        userInfoService.deletUser(userAccount,userPassword);
     }
 
     @GetMapping(path = "login/{userAccount}")
@@ -48,11 +49,13 @@ public class UserInfoController {
 
     }
 
-    @PutMapping(path = "/updateName/{userAccount}")
-    public void updateName(@PathVariable("userAccount") String userAccount,
-                            @RequestParam String userName
+    @PutMapping(path = "/updateInfo/{userAccount}")
+    public void updateInfo(@PathVariable("userAccount") String userAccount,
+                           @RequestParam String userPasswor,
+                           @RequestParam String userName,
+                           @RequestParam String userPhoneNumber
     ){
-        userInfoService.updateName(userAccount,userName);
+        userInfoService.updateInfo(userAccount,userPasswor,userName,userPhoneNumber);
 
     }
 }

@@ -31,16 +31,19 @@ public class UserInfo {
     private String userPassword;
     private String userName;
     private String userPhoneNumber;
-
+    private Timestamp createdTime;
+    private Timestamp updatedTime;
 
     public UserInfo(){
 
     }
-    public UserInfo(String userAccount,String userPassword,String userName,String userPhoneNumber){
+    public UserInfo(String userAccount, String userPassword, String userName, String userPhoneNumber, Timestamp createdTime, Timestamp updatedTime){
         this.userAccount = userAccount;
         this.userPassword = userPassword;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
+        this.createdTime = createdTime;
+        this.updatedTime = updatedTime;
     }
 
     public String getUserAccount() {
@@ -75,6 +78,23 @@ public class UserInfo {
         this.userPhoneNumber = userPhoneNumber;
     }
 
+
+    public Timestamp getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Timestamp createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Timestamp getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(Timestamp updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
     @Override
     public String toString(){
         return "UserInfo{" +
@@ -84,4 +104,5 @@ public class UserInfo {
                 ", userPhoneNumber='" + userPhoneNumber + '\'' +
                 '}';
     }
+
 }
