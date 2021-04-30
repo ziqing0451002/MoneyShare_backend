@@ -30,7 +30,7 @@ public class UserInfoService {
         UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
                 () -> new IllegalStateException("userAccount:" + userAccount + "不存在")
         );
-        if ( !Objects.equals(userInfo.getUserPassword(),userPassword)){
+        if (  !Objects.equals(userInfo.getUserPassword(),encoder_md5.encodeMD5(userPassword))){
             throw new IllegalStateException("密碼錯誤");
         }else{
             return true;
