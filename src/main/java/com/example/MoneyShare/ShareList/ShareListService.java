@@ -2,26 +2,27 @@ package com.example.MoneyShare.ShareList;
 
 import com.example.MoneyShare.UserInfo.UserInfo;
 import org.springframework.stereotype.Service;
+import com.example.MoneyShare.CommentModel.SerialNumberMaker;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.transaction.Transactional;
 import java.math.BigInteger;
-import java.sql.SQLOutput;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ShareListService {
 
     private ShareListRepository shareListRepository;
-    private int count = 0; //要想方法讓他不因為重是重開而定值
+    private SerialNumberMaker serialNumberMaker;
 
 
-
-    public ShareListService(ShareListRepository shareListRepository) {
+    public ShareListService(ShareListRepository shareListRepository, SerialNumberMaker serialNumberMaker) {
         this.shareListRepository = shareListRepository;
+        this.serialNumberMaker = serialNumberMaker;
     }
 
 
@@ -30,18 +31,16 @@ public class ShareListService {
     }
 
     public boolean addShareList(ShareList shareList){
-        // ID 前八碼為日期流水號
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-        String dateFormatToString = dateFormat.format(date).toString();
-        // ID 後五碼為編號流水號
-        StringBuilder id = new StringBuilder("0");
-        count = count + 1 ;
-        id.append("0".repeat(Math.max(0, (5 - getDigitsNumber(count)) - 1)));
-        String countTiString = id.toString() + count;
-        String result = dateFormatToString + countTiString;
-        BigInteger resultToBigint = new BigInteger(result );
-        shareList.setListId(resultToBigint);
+        int count = 0;
+        BigInteger idInit = serialNumberMaker.IdCount(count);
+        shareList.setListId(idInit);
+
+        while (shareListRepository.existsById(shareList.getListId())){
+            count = count + 1;
+            BigInteger id = serialNumberMaker.IdCount(count);
+            shareList.setListId(id);
+        }
+
         boolean exists = shareListRepository.existsById(shareList.getListId());
         if (exists){
             throw new IllegalStateException("listId:" + shareList.getListId() + "已被使用");
@@ -62,8 +61,39 @@ public class ShareListService {
         }
     }
 
-    public static int getDigitsNumber(final double d) {
-        return (int) Math.log10(d) + 1;
+    public void deletShareList(BigInteger listId,String listCreater){
+        ShareList shareList = shareListRepository.findById(listId).orElseThrow(
+                () -> new IllegalStateException("listId:" + listId + "不存在")
+        );
+
+        if ( !Objects.equals(shareList.getListCreater(),listCreater)){
+            throw new IllegalStateException("限發起人刪除");
+
+        }else{
+            shareListRepository.deleteById(listId);
+        }
+    }
+
+    @Transactional
+    public void upShareListInfo(BigInteger listId, String listName, String listCreater, String listMember){
+        ShareList shareList = shareListRepository.findById(listId).orElseThrow(
+                () -> new IllegalStateException("listId:" + listId + "不存在")
+        );
+
+        if(!Objects.equals(shareList.getListCreater(),listCreater)){
+            throw new IllegalStateException("限發起人編輯");
+        }else if(listName == null || listName.length() <= 0){
+            throw new IllegalStateException("名稱不得為空");
+        }else if(listMember == null || listMember.length() <= 0){
+            throw new IllegalStateException("參與人不得為空");
+        }else {
+            shareList.setListName(listName);
+            shareList.setListMember(listMember);
+            //紀錄修改時間
+            Long datetime = System.currentTimeMillis();
+            Timestamp timestamp = new Timestamp(datetime);
+            shareList.setUpdatedTime(timestamp);
+        }
     }
 
 
