@@ -1,8 +1,6 @@
 package com.example.MoneyShare.ShareList;
 
 
-import com.example.MoneyShare.UserInfo.UserInfo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -24,8 +22,8 @@ public class ShareListController {
     }
 
     @PostMapping(path = "addShareList")
-    public void registerNewUser(@RequestBody ShareList shareList ){
-        shareListService.addShareList(shareList);
+    public boolean registerNewUser(@RequestBody ShareList shareList ){
+        return shareListService.addShareList(shareList);
     }
 
     @DeleteMapping(path = "deletShareList/{listId}")

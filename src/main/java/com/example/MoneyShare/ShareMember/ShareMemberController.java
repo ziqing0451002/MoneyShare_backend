@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "ShareMember")
@@ -14,14 +15,24 @@ public class ShareMemberController {
         this.shareMemberService = shareMemberService;
     }
 
-    @GetMapping(path = "getMemberList")
-    public List<ShareMember> getMemberList(){
+    @GetMapping(path = "getMember")
+    public List<ShareMember> getMember(){
         return shareMemberService.getShareMember();
     }
 
+    @GetMapping(path = "getMemberById")
+    public List<ShareMember> getMemberById(@RequestParam BigInteger shareListId){
+        return shareMemberService.getShareMemberById(shareListId);
+    }
+
     @PostMapping(path = "addshareMember")
-    public void registerNewUser(@RequestBody ShareMember shareMember){
-        shareMemberService.addShareMember(shareMember);
+    public boolean addShareMember(@RequestBody ShareMember shareMember){
+        return shareMemberService.addShareMember(shareMember);
+    }
+
+    @PostMapping(path = "addshareMemberLoop")
+    public boolean addShareMemberLoop(@RequestParam String memberList,@RequestParam BigInteger shareListId){
+        return shareMemberService.addreShareMemberLoop(memberList,shareListId);
     }
 
     @DeleteMapping(path = "deletShareMember/{memberId}")

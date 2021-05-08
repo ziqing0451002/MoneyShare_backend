@@ -1,15 +1,12 @@
 package com.example.MoneyShare.ShareList;
 
-import com.example.MoneyShare.UserInfo.UserInfo;
 import org.springframework.stereotype.Service;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.example.MoneyShare.ShareMember.ShareMemberService;
 
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,11 +15,13 @@ public class ShareListService {
 
     private ShareListRepository shareListRepository;
     private SerialNumberMaker serialNumberMaker;
+    private ShareMemberService shareMemberService;
 
 
-    public ShareListService(ShareListRepository shareListRepository, SerialNumberMaker serialNumberMaker) {
+    public ShareListService(ShareListRepository shareListRepository, SerialNumberMaker serialNumberMaker, ShareMemberService shareMemberService) {
         this.shareListRepository = shareListRepository;
         this.serialNumberMaker = serialNumberMaker;
+        this.shareMemberService = shareMemberService;
     }
 
 
@@ -56,7 +55,10 @@ public class ShareListService {
             Timestamp timestamp = new Timestamp(datetime);
             shareList.setCreatedTime(timestamp);
             shareList.setUpdatedTime(timestamp);
+            //將分帳參與人紀錄至ShareMember
+            shareMemberService.addreShareMemberLoop(shareList.getListMember(),shareList.getListId());
             shareListRepository.save(shareList);
+
             return true;
         }
     }

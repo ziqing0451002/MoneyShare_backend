@@ -8,6 +8,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class ShareMemberService {
@@ -22,6 +23,25 @@ public class ShareMemberService {
 
     public List<ShareMember> getShareMember(){
         return shareMemberRepository.findAll();
+    }
+
+    public List<ShareMember> getShareMemberById(BigInteger id){
+        return shareMemberRepository.findShareMemberByShareListId(id);
+    }
+
+    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId){
+        String[] memberSplit = memberList.split(",");
+        System.out.println(memberSplit);
+        for (String s : memberSplit) {
+            ShareMember shareMember = new ShareMember();
+            System.out.println(s);
+            shareMember.setMemberName(s);
+            System.out.println(shareMember);
+            shareMember.setShareListId(shareListId);
+            System.out.println(s);
+            addShareMember(shareMember);
+        }
+        return true;
     }
 
     public boolean addShareMember(ShareMember shareMember ) {
