@@ -16,13 +16,13 @@ public class SerialNumberMaker {
         String dateFormatToString = dateFormat.format(date).toString();
         // ID 後五碼為編號流水號
         count = count + 1 ;
-        System.out.println(count);
+//        System.out.println(count);
         StringBuilder id = new StringBuilder("0");
         id.append("0".repeat(Math.max(0, (5 - getDigitsNumber(count)) - 1)));
         String countToString = id.toString() + count;
         String result = dateFormatToString + countToString;
         BigInteger resultToBigint = new BigInteger(result );
-        System.out.println(resultToBigint);
+//        System.out.println(resultToBigint);
         return resultToBigint;
     }
 

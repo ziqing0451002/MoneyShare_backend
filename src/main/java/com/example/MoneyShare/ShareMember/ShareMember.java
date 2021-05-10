@@ -17,13 +17,21 @@ public class ShareMember {
     private BigInteger memberId;
     private String memberName;
     private BigInteger shareListId;
+    private BigInteger shareItemId;
+    private String shareItemName;
+    private Integer shareMoney;
+    private Integer sharePayBefore;
     private Timestamp createdTime;
     private Timestamp updatedTime;
 
-    public ShareMember(BigInteger memberId, String memberName, BigInteger shareListId, Timestamp createdTime, Timestamp updatedTime) {
+    public ShareMember(BigInteger memberId, String memberName, BigInteger shareListId, BigInteger shareItemId, String shareItemName, Integer shareMoney, Integer sharePayBefore, Timestamp createdTime, Timestamp updatedTime) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.shareListId = shareListId;
+        this.shareItemId = shareItemId;
+        this.shareItemName = shareItemName;
+        this.shareMoney = shareMoney;
+        this.sharePayBefore = sharePayBefore;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
     }
@@ -70,5 +78,37 @@ public class ShareMember {
 
     public void setUpdatedTime(Timestamp updatedTime) {
         this.updatedTime = updatedTime;
+    }
+
+    public BigInteger getShareItemId() {
+        return shareItemId;
+    }
+
+    public void setShareItemId(BigInteger shareItemId) {
+        this.shareItemId = shareItemId;
+    }
+
+    public String getShareItemName() {
+        return shareItemName;
+    }
+
+    public void setShareItemName(String shareItemName) {
+        this.shareItemName = shareItemName;
+    }
+
+    public Integer getShareMoney() {
+        return shareMoney;
+    }
+
+    public void setShareMoney(Integer shareMoney) {
+        this.shareMoney = shareMoney;
+    }
+
+    public Integer getSharePayBefore() {
+        return sharePayBefore;
+    }
+
+    public void setSharePayBefore(Integer sharePayBefore) {
+        this.sharePayBefore = sharePayBefore;
     }
 }

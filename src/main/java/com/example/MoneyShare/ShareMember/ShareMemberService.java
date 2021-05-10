@@ -39,6 +39,35 @@ public class ShareMemberService {
             System.out.println(shareMember);
             shareMember.setShareListId(shareListId);
             System.out.println(s);
+            shareMember.setShareItemId(BigInteger.valueOf(0));
+            shareMember.setShareItemName("init");
+            shareMember.setShareMoney((0));
+            addShareMember(shareMember);
+        }
+        return true;
+    }
+
+    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,BigInteger shareItemId,String shareItemName,Integer itemCost,String personPayBefore){
+        String[] memberSplit = memberList.split(",");
+        System.out.println(memberSplit);
+        for (String s : memberSplit) {
+            ShareMember shareMember = new ShareMember();
+            shareMember.setMemberName(s);
+            System.out.println("變數S:"+ s);
+            System.out.println("變數personPayBefore:"+ personPayBefore);
+
+            shareMember.setShareListId(shareListId);
+//            System.out.println(s);
+            shareMember.setShareItemId(shareItemId);
+            shareMember.setShareItemName(shareItemName);
+            shareMember.setShareMoney(itemCost/memberSplit.length);
+            if (Objects.equals(s,personPayBefore)){
+                shareMember.setSharePayBefore(itemCost);
+                System.out.println("SUCCSEE");
+
+            }else{
+                shareMember.setSharePayBefore(0);
+            }
             addShareMember(shareMember);
         }
         return true;

@@ -1,5 +1,5 @@
 package com.example.MoneyShare.ShareItem;
-
+import com.example.MoneyShare.ShareMember.ShareMemberService;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +13,12 @@ public class ShareItemService {
 
     private ShareItemRepository shareItemRepository;
     private SerialNumberMaker serialNumberMaker;
+    private ShareMemberService shareMemberService;
 
-    public ShareItemService(ShareItemRepository shareItemRepository, SerialNumberMaker serialNumberMaker) {
+    public ShareItemService(ShareItemRepository shareItemRepository, SerialNumberMaker serialNumberMaker, ShareMemberService shareMemberService) {
         this.shareItemRepository = shareItemRepository;
         this.serialNumberMaker = serialNumberMaker;
+        this.shareMemberService = shareMemberService;
     }
 
     public List<com.example.MoneyShare.ShareItem.ShareItem> getShareItem(){
@@ -54,7 +56,7 @@ public class ShareItemService {
             shareItem.setCreatedTime(timestamp);
             shareItem.setUpdatedTime(timestamp);
             //將分帳參與人紀錄至ShareMember
-//            shareMemberService.addreShareMemberLoop(shareItem.getListMember(),shareItem.getListId());
+            shareMemberService.addreShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater());
             shareItemRepository.save(shareItem);
 
             return true;
