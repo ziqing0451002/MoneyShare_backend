@@ -49,5 +49,10 @@ public class ShareMemberController {
         shareMemberService.upShareMemberInfo(memberId,memberName,shareListId);
     }
 
+    @GetMapping(path = "getResult/{shareListId}")
+    public void resultCalculate(@PathVariable("shareListId")  BigInteger shareListId){
+        shareMemberService.resultCalculate(shareListId);
+    }
+
 
 }

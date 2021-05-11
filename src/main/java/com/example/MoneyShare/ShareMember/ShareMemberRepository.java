@@ -9,5 +9,6 @@ import java.util.Optional;
 public interface ShareMemberRepository extends JpaRepository<ShareMember, BigInteger> {
 
     List<ShareMember> findShareMemberByShareListId(BigInteger shareListId);
-    List<ShareMember> findShareMemberByShareItemIdAndMemberName(BigInteger shareItemId, String memberName);
+    List<ShareMember> findShareMemberByShareListIdAndShareItemId(BigInteger shareListId,BigInteger shareItemId);
+
 }
