@@ -56,7 +56,7 @@ public class ShareListService {
             shareList.setCreatedTime(timestamp);
             shareList.setUpdatedTime(timestamp);
             //將分帳參與人紀錄至ShareMember
-            shareMemberService.addreShareMemberLoop(shareList.getListMember(),shareList.getListId());
+            shareMemberService.addreShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());
             shareListRepository.save(shareList);
 
             return true;

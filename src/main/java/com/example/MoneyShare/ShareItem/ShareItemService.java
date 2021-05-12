@@ -56,7 +56,7 @@ public class ShareItemService {
             shareItem.setCreatedTime(timestamp);
             shareItem.setUpdatedTime(timestamp);
             //將分帳參與人紀錄至ShareMember
-            shareMemberService.addreShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater());
+            shareMemberService.addreShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater(),shareItem.getItemCreater());
             shareItemRepository.save(shareItem);
 
             return true;

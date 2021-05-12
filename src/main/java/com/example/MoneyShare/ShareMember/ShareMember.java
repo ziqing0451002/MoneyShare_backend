@@ -19,17 +19,19 @@ public class ShareMember {
     private BigInteger shareListId;
     private BigInteger shareItemId;
     private String shareItemName;
+    private String listCreater;
     private Integer shareMoney;
     private Integer sharePayBefore;
     private Timestamp createdTime;
     private Timestamp updatedTime;
 
-    public ShareMember(BigInteger memberId, String memberName, BigInteger shareListId, BigInteger shareItemId, String shareItemName, Integer shareMoney, Integer sharePayBefore, Timestamp createdTime, Timestamp updatedTime) {
+    public ShareMember(BigInteger memberId, String memberName, BigInteger shareListId, BigInteger shareItemId, String shareItemName, String listCreater, Integer shareMoney, Integer sharePayBefore, Timestamp createdTime, Timestamp updatedTime) {
         this.memberId = memberId;
         this.memberName = memberName;
         this.shareListId = shareListId;
         this.shareItemId = shareItemId;
         this.shareItemName = shareItemName;
+        this.listCreater = listCreater;
         this.shareMoney = shareMoney;
         this.sharePayBefore = sharePayBefore;
         this.createdTime = createdTime;
@@ -110,5 +112,13 @@ public class ShareMember {
 
     public void setSharePayBefore(Integer sharePayBefore) {
         this.sharePayBefore = sharePayBefore;
+    }
+
+    public String getListCreater() {
+        return listCreater;
+    }
+
+    public void setListCreater(String listCreater) {
+        this.listCreater = listCreater;
     }
 }

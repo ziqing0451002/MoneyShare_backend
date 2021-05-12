@@ -24,6 +24,10 @@ public class ShareResultService {
         return shareResultRepository.findAll();
     }
 
+//    public boolean addShareResultFromCalculate(){
+//
+//    }
+
     public boolean addShareResult(ShareResult shareResult ){
         int count = 0;
         BigInteger idInit = serialNumberMaker.IdCount(count);
@@ -44,7 +48,11 @@ public class ShareResultService {
             throw new IllegalStateException("名稱不得為空");
         }else if (shareResult.getResultCreater()== null || shareResult.getResultCreater().length() <= 0){
             throw new IllegalStateException("創建人不得為空");
-        }else if (shareResult.getShareMoney()== null){
+        }else if (shareResult.getPayTotal()== null){
+            throw new IllegalStateException("已付金額不得為空");
+        }else if (shareResult.getShareTotal()== null){
+            throw new IllegalStateException("未付金額不得為空");
+        }else if (shareResult.getResultTotal()== null){
             throw new IllegalStateException("分帳金額不得為空");
         }else{
             //紀錄創建時間以及初始化最終修改時間

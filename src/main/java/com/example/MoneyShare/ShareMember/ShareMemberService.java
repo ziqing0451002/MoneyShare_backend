@@ -1,24 +1,27 @@
 package com.example.MoneyShare.ShareMember;
 
+import com.example.MoneyShare.ShareResult.ShareResultService;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class ShareMemberService {
 
     private ShareMemberRepository shareMemberRepository;
     private SerialNumberMaker serialNumberMaker;
+    private ShareResultService shareResultService;
 
-    public ShareMemberService(ShareMemberRepository shareMemberRepository, SerialNumberMaker serialNumberMaker) {
+    public ShareMemberService(ShareMemberRepository shareMemberRepository, SerialNumberMaker serialNumberMaker, ShareResultService shareResultService) {
         this.shareMemberRepository = shareMemberRepository;
         this.serialNumberMaker = serialNumberMaker;
+        this.shareResultService = shareResultService;
     }
 
     public List<ShareMember> getShareMember(){
@@ -29,7 +32,7 @@ public class ShareMemberService {
         return shareMemberRepository.findShareMemberByShareListId(id);
     }
 
-    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId){
+    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,String listCreater){
         String[] memberSplit = memberList.split(",");
         System.out.println(memberSplit);
         for (String s : memberSplit) {
@@ -38,6 +41,7 @@ public class ShareMemberService {
             shareMember.setMemberName(s);
             System.out.println(shareMember);
             shareMember.setShareListId(shareListId);
+            shareMember.setListCreater(listCreater);
             System.out.println(s);
             shareMember.setShareItemId(BigInteger.valueOf(0));
             shareMember.setShareItemName("init");
@@ -47,7 +51,7 @@ public class ShareMemberService {
         return true;
     }
 
-    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,BigInteger shareItemId,String shareItemName,Integer itemCost,String personPayBefore){
+    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,BigInteger shareItemId,String shareItemName,Integer itemCost,String personPayBefore,String listCreater){
         String[] memberSplit = memberList.split(",");
         System.out.println(memberSplit);
         for (String s : memberSplit) {
@@ -57,6 +61,7 @@ public class ShareMemberService {
             System.out.println("變數personPayBefore:"+ personPayBefore);
 
             shareMember.setShareListId(shareListId);
+            shareMember.setListCreater(listCreater);
 //            System.out.println(s);
             shareMember.setShareItemId(shareItemId);
             shareMember.setShareItemName(shareItemName);
@@ -141,13 +146,44 @@ public class ShareMemberService {
         List<ShareMember> shareMembers = shareMemberRepository.findShareMemberByShareListIdAndShareItemId(shareListId, BigInteger.valueOf(0));
         System.out.println(shareMembers);
 
-        for (int i = 0; i < shareMembers.size(); i++){
-            for (int j = 0; j < shareMembers.size(); j++){
-                System.out.println(shareMembers.get(1));
+        for (int i = 0; i < shareMembers.size(); i++) {
+            ShareCount shareCount = new ShareCount();
+            ShareMember shareMember = shareMembers.get(i);
+            shareCount.setShareListId(shareMember.getShareListId());
+            shareCount.setMemberName(shareMember.getMemberName());
+            shareCount.setCountCreater(shareMember.getListCreater());
+            shareCount.setPayTotal(0);
+            shareCount.setShareTotal(0);
+            shareCount.setResultTotal(0);
+//            System.out.println(shareCount.getMemberName());
+//            System.out.println(shareCount.getShareListId());
+//            System.out.println(shareCount.getPayTotal());
+//            System.out.println(shareCount.getShareTotal());
+//            System.out.println(shareCount.getResultTotal());
+            for (ShareMember payDetail : payDetails) {
+//                if (!payDetail.getShareItemId().equals(BigInteger.valueOf(0))){
+//                    System.out.println("getMemberName:" + payDetail.getMemberName());
+//                    System.out.println("getShareListId:" + payDetail.getShareListId());
+//                    System.out.println("getSharePayBefore:" + payDetail.getSharePayBefore());
+//                    System.out.println("getShareMoney:" + payDetail.getShareMoney());
+//                }
+                if (shareCount.getShareListId().equals(payDetail.getShareListId()) && shareCount.getMemberName().equals(payDetail.getMemberName()) && !payDetail.getShareItemId().equals(BigInteger.valueOf(0))) {
+//                    System.out.println("getMemberName:" + payDetail.getMemberName());
+//                    System.out.println("getShareListId:" + payDetail.getShareListId());
+//                    System.out.println("getSharePayBefore:" + payDetail.getSharePayBefore());
+//                    System.out.println("getShareMoney:" + payDetail.getShareMoney());
+                    shareCount.setPayTotal(shareCount.getPayTotal() + payDetail.getSharePayBefore());
+                    shareCount.setShareTotal(shareCount.getShareTotal() + payDetail.getShareMoney());
+                    shareCount.setResultTotal(shareCount.getPayTotal() - shareCount.getShareTotal());
+//                }
+                }
             }
-        }
-        System.out.println(shareMembers.size());
+            System.out.println("getMemberName:" + shareCount.getMemberName());
+            System.out.println("getResultTotal:" + shareCount.getResultTotal());
+//            shareResultService.addShareResultFromCalculate();
 
+
+        }
 
     }
 
