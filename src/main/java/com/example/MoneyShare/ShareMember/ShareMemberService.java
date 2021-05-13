@@ -141,11 +141,11 @@ public class ShareMemberService {
     }
 
     //想辦法產出計算後的結果，set進去ShareResult
-    public void resultCalculate(BigInteger shareListId){
+    public boolean resultCalculate(BigInteger shareListId){
         List<ShareMember> payDetails = shareMemberRepository.findShareMemberByShareListId(shareListId);
         List<ShareMember> shareMembers = shareMemberRepository.findShareMemberByShareListIdAndShareItemId(shareListId, BigInteger.valueOf(0));
         System.out.println(shareMembers);
-
+        boolean calculateResult = false;
         for (int i = 0; i < shareMembers.size(); i++) {
             ShareCount shareCount = new ShareCount();
             ShareMember shareMember = shareMembers.get(i);
@@ -180,11 +180,11 @@ public class ShareMemberService {
             }
             System.out.println("getMemberName:" + shareCount.getMemberName());
             System.out.println("getResultTotal:" + shareCount.getResultTotal());
-//            shareResultService.addShareResultFromCalculate();
+            calculateResult = shareResultService.addShareResultFromCalculate(shareCount);
 
 
         }
-
+        return calculateResult;
     }
 
 

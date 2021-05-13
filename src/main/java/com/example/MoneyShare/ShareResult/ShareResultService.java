@@ -1,6 +1,8 @@
 package com.example.MoneyShare.ShareResult;
 
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
+import com.example.MoneyShare.ShareMember.ShareCount;
+import com.example.MoneyShare.ShareList.ShareListService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -13,20 +15,36 @@ public class ShareResultService {
 
     private ShareResultRepository shareResultRepository;
     private SerialNumberMaker serialNumberMaker;
+//    private ShareListService shareListService;
 
 
     public ShareResultService(ShareResultRepository shareResultRepository, SerialNumberMaker serialNumberMaker) {
         this.shareResultRepository = shareResultRepository;
         this.serialNumberMaker = serialNumberMaker;
+//        this.shareListService = shareListService;
     }
 
     public List<ShareResult> getShareResult(){
         return shareResultRepository.findAll();
     }
 
-//    public boolean addShareResultFromCalculate(){
-//
-//    }
+    public boolean addShareResultFromCalculate(ShareCount shareCount){
+        ShareResult shareResult = new ShareResult();
+        shareResult.setShareListId(shareCount.getShareListId());
+        shareResult.setResultCreater(shareCount.getCountCreater());
+        shareResult.setMemberName(shareCount.getMemberName());
+        shareResult.setPayTotal(shareCount.getPayTotal());
+        shareResult.setShareTotal(shareCount.getShareTotal());
+        shareResult.setResultTotal(shareCount.getResultTotal());
+        System.out.println("setResultId:"+ shareResult.getShareListId());
+        System.out.println("getResultCreater:"+ shareResult.getResultCreater());
+        System.out.println("getMemberName:"+ shareResult.getMemberName());
+        System.out.println("getPayTotal:"+ shareResult.getPayTotal());
+        System.out.println("getShareTotal:"+ shareResult.getShareTotal());
+        System.out.println("getResultTotal:"+ shareResult.getResultTotal());
+        boolean addResult = addShareResult(shareResult);
+        return addResult;
+    }
 
     public boolean addShareResult(ShareResult shareResult ){
         int count = 0;
@@ -60,7 +78,7 @@ public class ShareResultService {
             Timestamp timestamp = new Timestamp(datetime);
             shareResult.setCreatedTime(timestamp);
             shareResult.setUpdatedTime(timestamp);
-
+//            shareListService.setShareResultId(shareResult.getShareListId(),shareResult.getResultId());
             shareResultRepository.save(shareResult);
 
             return true;

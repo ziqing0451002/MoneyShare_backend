@@ -16,7 +16,6 @@ public class ShareList {
     private String listName;
     private String listCreater;
     private String listMember;
-    private BigInteger shareResultId;
     private Timestamp createdTime;
     private Timestamp updatedTime;
 
@@ -24,12 +23,11 @@ public class ShareList {
 
     }
 
-    public ShareList(BigInteger listId, String listName, String listCreater, String listMember, BigInteger shareResultId, Timestamp createdTime, Timestamp updatedTime) {
+    public ShareList(BigInteger listId, String listName, String listCreater, String listMember, Timestamp createdTime, Timestamp updatedTime) {
         this.listId = listId;
         this.listName = listName;
         this.listCreater = listCreater;
         this.listMember = listMember;
-        this.shareResultId = shareResultId;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
     }
@@ -67,13 +65,6 @@ public class ShareList {
         this.listMember = listNumber;
     }
 
-    public BigInteger getShareResultId() {
-        return shareResultId;
-    }
-
-    public void setShareResultId(BigInteger shareResultId) {
-        this.shareResultId = shareResultId;
-    }
 
     public Timestamp getCreatedTime() {
         return createdTime;
