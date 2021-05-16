@@ -29,6 +29,10 @@ public class ShareListService {
         return shareListRepository.findAll();
     }
 
+    public ShareList getShareListByShareListId(BigInteger shareListId){
+        return shareListRepository.findShareListByShareListId(shareListId);
+    }
+
     public boolean addShareList(ShareList shareList){
         int count = 0;
         BigInteger idInit = serialNumberMaker.IdCount(count);

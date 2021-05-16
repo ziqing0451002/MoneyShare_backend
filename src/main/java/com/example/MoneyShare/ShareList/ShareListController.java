@@ -21,6 +21,11 @@ public class ShareListController {
         return shareListService.getShareList();
     }
 
+    @GetMapping(path = "getShareListById/{listId}")
+    public ShareList getShareListById(@PathVariable("listId") BigInteger listId){
+        return shareListService.getShareListByShareListId(listId);
+    }
+
     @PostMapping(path = "addShareList")
     public boolean registerNewUser(@RequestBody ShareList shareList ){
         return shareListService.addShareList(shareList);

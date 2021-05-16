@@ -26,6 +26,10 @@ public class UserInfoService {
         return userInfoRepository.findAll();
     }
 
+    public UserInfo getUserInfoByAccount(String userAccount){
+        return userInfoRepository.findUserInfoByUserAccount(userAccount);
+    }
+
     public boolean userLogin(String  userAccount, String  userPassword){
         UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
                 () -> new IllegalStateException("userAccount:" + userAccount + "不存在")

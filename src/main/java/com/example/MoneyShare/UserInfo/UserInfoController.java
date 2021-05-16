@@ -22,6 +22,11 @@ public class UserInfoController {
         return userInfoService.getUserInfo();
     }
 
+    @GetMapping(path = "getUserByAccount/{userAccount}")
+    public UserInfo getUserByAccount(@PathVariable("userAccount") String userAccount){
+        return userInfoService.getUserInfoByAccount(userAccount);
+    }
+
     @PostMapping(path = "AddUser")
     public void registerNewUser(@RequestBody UserInfo userInfo){
         userInfoService.addUser(userInfo);
