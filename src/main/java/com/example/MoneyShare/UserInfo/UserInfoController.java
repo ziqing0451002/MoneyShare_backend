@@ -57,10 +57,9 @@ public class UserInfoController {
     @PutMapping(path = "/updateInfo/{userAccount}")
     public void updateInfo(@PathVariable("userAccount") String userAccount,
                            @RequestParam String userPasswor,
-                           @RequestParam String userName,
                            @RequestParam String userPhoneNumber
     ){
-        userInfoService.updateInfo(userAccount,userPasswor,userName,userPhoneNumber);
+        userInfoService.updateInfo(userAccount,userPasswor,userPhoneNumber);
 
     }
 }

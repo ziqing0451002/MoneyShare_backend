@@ -30,7 +30,7 @@ public class ShareListService {
     }
 
     public ShareList getShareListByShareListId(BigInteger shareListId){
-        return shareListRepository.findShareListByShareListId(shareListId);
+        return shareListRepository.findShareListByListId(shareListId);
     }
 
     public boolean addShareList(ShareList shareList){

@@ -65,7 +65,7 @@ public class ShareMemberService {
 //            System.out.println(s);
             shareMember.setShareItemId(shareItemId);
             shareMember.setShareItemName(shareItemName);
-            shareMember.setShareMoney(itemCost/memberSplit.length);
+            shareMember.setShareMoney(itemCost/memberList.length());
             if (Objects.equals(s,personPayBefore)){
                 shareMember.setSharePayBefore(itemCost);
                 System.out.println("SUCCSEE");

@@ -27,7 +27,8 @@ public class ShareListController {
     }
 
     @PostMapping(path = "addShareList")
-    public boolean registerNewUser(@RequestBody ShareList shareList ){
+    public boolean addShareList(@RequestBody ShareList shareList ){
+        System.out.println("==========================addShareList===========================");
         return shareListService.addShareList(shareList);
     }
 

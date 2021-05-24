@@ -42,9 +42,12 @@ public class UserInfoService {
     }
 
     public void addUser(UserInfo userInfo){
-        boolean exists = userInfoRepository.existsById(userInfo.getUserAccount());
-        if (exists){
+        boolean existsAccount = userInfoRepository.existsById(userInfo.getUserAccount());
+        boolean existsName = userInfoRepository.existsByUserName(userInfo.getUserName());
+        if (existsAccount){
             throw new IllegalStateException("userAccount:" + userInfo.getUserAccount() + "已被使用");
+        }else if (existsName){
+            throw new IllegalStateException("userName:" + userInfo.getUserName() + "已被使用");
         }else if (userInfo.getUserName() == null || userInfo.getUserName().length() <= 0){
             throw new IllegalStateException("暱稱不得為空");
         } else if (userInfo.getUserPhoneNumber() == null || userInfo.getUserPhoneNumber().length() <= 0) {
@@ -98,19 +101,16 @@ public class UserInfoService {
 
     }
     @Transactional
-    public void updateInfo(String userAccount, String userPassword,String userName,String userPhoneNumber){
+    public void updateInfo(String userAccount, String userPassword,String userPhoneNumber){
         UserInfo userInfo = userInfoRepository.findById(userAccount).orElseThrow(
                 () -> new IllegalStateException("userAccount:" + userAccount + "不存在")
         );
 
-        if (userName == null || userName.length() <= 0){
-            throw new IllegalStateException("暱稱不得為空");
-        } else if (userPhoneNumber == null || userPhoneNumber.length() <= 0) {
+        if (userPhoneNumber == null || userPhoneNumber.length() <= 0) {
             throw new IllegalStateException("手機不得為空");
         }else if( !Objects.equals(userInfo.getUserPassword(),encoder_md5.encodeMD5(userPassword))){
             throw new IllegalStateException("密碼錯誤");
         }else{
-            userInfo.setUserName(userName);
             userInfo.setUserPhoneNumber(userPhoneNumber);
             //紀錄修改時間
             Long datetime = System.currentTimeMillis();
