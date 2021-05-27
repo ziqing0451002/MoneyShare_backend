@@ -1,6 +1,7 @@
 package com.example.MoneyShare.ShareList;
 
 
+import com.example.MoneyShare.ShareItem.ShareItem;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigInteger;
@@ -24,6 +25,11 @@ public class ShareListController {
     @GetMapping(path = "getShareListById/{listId}")
     public ShareList getShareListById(@PathVariable("listId") BigInteger listId){
         return shareListService.getShareListByShareListId(listId);
+    }
+
+    @GetMapping(path = "submitShareList/{listId}")
+    public ShareList submitShareList(@PathVariable("listId") BigInteger listId ){
+        return shareListService.submitShareList(listId);
     }
 
     @PostMapping(path = "addShareList")

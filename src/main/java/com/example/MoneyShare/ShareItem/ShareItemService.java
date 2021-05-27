@@ -1,4 +1,5 @@
 package com.example.MoneyShare.ShareItem;
+import com.example.MoneyShare.ShareList.ShareListService;
 import com.example.MoneyShare.ShareMember.ShareMemberService;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,12 @@ public class ShareItemService {
         this.shareMemberService = shareMemberService;
     }
 
-    public List<com.example.MoneyShare.ShareItem.ShareItem> getShareItem(){
+    public List<ShareItem> getShareItem(){
         return shareItemRepository.findAll();
+    }
+
+    public ShareItem getShareItemById(BigInteger shareItemId){
+        return shareItemRepository.findShareItemByItemId(shareItemId);
     }
 
     public boolean addShareItem(ShareItem shareItem){
@@ -56,11 +61,20 @@ public class ShareItemService {
             shareItem.setCreatedTime(timestamp);
             shareItem.setUpdatedTime(timestamp);
             //將分帳參與人紀錄至ShareMember
-            shareMemberService.addreShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater(),shareItem.getItemCreater());
+//            shareMemberService.addreShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater(),shareItem.getItemCreater());
             shareItemRepository.save(shareItem);
 
             return true;
         }
+    }
+
+    public List<ShareItem> submitShareItem(BigInteger listId){
+        List<ShareItem> shareItems =  shareItemRepository.findShareItemByShareListId(listId);
+        for(ShareItem shareItem:  shareItems){
+            //將分帳參與人紀錄至ShareMember
+            shareMemberService.addShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater(),shareItem.getItemCreater());
+        }
+        return shareItems;
     }
 
     public void deletShareItem(BigInteger itemId,String itemCreater){

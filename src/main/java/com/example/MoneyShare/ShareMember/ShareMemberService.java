@@ -1,13 +1,16 @@
 package com.example.MoneyShare.ShareMember;
 
+import com.example.MoneyShare.ShareItem.ShareItem;
+import com.example.MoneyShare.ShareList.ShareList;
 import com.example.MoneyShare.ShareResult.ShareResultService;
+import com.example.MoneyShare.ShareList.ShareListRepository;
+import com.example.MoneyShare.ShareItem.ShareItemRepository;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,11 +20,16 @@ public class ShareMemberService {
     private ShareMemberRepository shareMemberRepository;
     private SerialNumberMaker serialNumberMaker;
     private ShareResultService shareResultService;
+    private ShareListRepository shareListRepository;
+    private ShareItemRepository shareItemRepository;
 
-    public ShareMemberService(ShareMemberRepository shareMemberRepository, SerialNumberMaker serialNumberMaker, ShareResultService shareResultService) {
+
+    public ShareMemberService(ShareMemberRepository shareMemberRepository, SerialNumberMaker serialNumberMaker, ShareResultService shareResultService, ShareListRepository shareListRepository, ShareItemRepository shareItemRepository) {
         this.shareMemberRepository = shareMemberRepository;
         this.serialNumberMaker = serialNumberMaker;
         this.shareResultService = shareResultService;
+        this.shareListRepository = shareListRepository;
+        this.shareItemRepository = shareItemRepository;
     }
 
     public List<ShareMember> getShareMember(){
@@ -32,7 +40,7 @@ public class ShareMemberService {
         return shareMemberRepository.findShareMemberByShareListId(id);
     }
 
-    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,String listCreater){
+    public boolean addShareMemberLoop(String memberList,BigInteger shareListId,String listCreater){
         String[] memberSplit = memberList.split(",");
         System.out.println(memberSplit);
         for (String s : memberSplit) {
@@ -51,7 +59,7 @@ public class ShareMemberService {
         return true;
     }
 
-    public boolean addreShareMemberLoop(String memberList,BigInteger shareListId,BigInteger shareItemId,String shareItemName,Integer itemCost,String personPayBefore,String listCreater){
+    public boolean addShareMemberLoop(String memberList,BigInteger shareListId,BigInteger shareItemId,String shareItemName,Integer itemCost,String personPayBefore,String listCreater){
         String[] memberSplit = memberList.split(",");
         System.out.println(memberSplit);
         for (String s : memberSplit) {
@@ -65,7 +73,7 @@ public class ShareMemberService {
 //            System.out.println(s);
             shareMember.setShareItemId(shareItemId);
             shareMember.setShareItemName(shareItemName);
-            shareMember.setShareMoney(itemCost/memberList.length());
+            shareMember.setShareMoney(itemCost/memberSplit.length);
             if (Objects.equals(s,personPayBefore)){
                 shareMember.setSharePayBefore(itemCost);
                 System.out.println("SUCCSEE");
@@ -142,6 +150,17 @@ public class ShareMemberService {
 
     //想辦法產出計算後的結果，set進去ShareResult
     public boolean resultCalculate(BigInteger shareListId){
+        //送出shareList表單，產生shareMember
+        ShareList shareList =  shareListRepository.findShareListByListId(shareListId);
+        addShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());
+
+        //送出shareItem表單，產生shareMember
+        List<ShareItem> shareItems =  shareItemRepository.findShareItemByShareListId(shareListId);
+        for(ShareItem shareItem:  shareItems){
+            addShareMemberLoop(shareItem.getItemMember(),shareItem.getShareListId(),shareItem.getItemId(),shareItem.getItemName(),shareItem.getItemCost(),shareItem.getItemCreater(),shareItem.getItemCreater());
+        }
+
+        //開始計算
         List<ShareMember> payDetails = shareMemberRepository.findShareMemberByShareListId(shareListId);
         List<ShareMember> shareMembers = shareMemberRepository.findShareMemberByShareListIdAndShareItemId(shareListId, BigInteger.valueOf(0));
         System.out.println(shareMembers);

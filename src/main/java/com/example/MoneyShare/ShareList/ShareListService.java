@@ -1,5 +1,6 @@
 package com.example.MoneyShare.ShareList;
 
+import com.example.MoneyShare.ShareItem.ShareItem;
 import org.springframework.stereotype.Service;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import com.example.MoneyShare.ShareMember.ShareMemberService;
@@ -60,11 +61,18 @@ public class ShareListService {
             shareList.setCreatedTime(timestamp);
             shareList.setUpdatedTime(timestamp);
             //將分帳參與人紀錄至ShareMember
-            shareMemberService.addreShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());
+//            shareMemberService.addreShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());
             shareListRepository.save(shareList);
 
             return true;
         }
+    }
+
+    public ShareList submitShareList(BigInteger listId){
+        ShareList shareList =  shareListRepository.findShareListByListId(listId);
+        //將分帳參與人紀錄至ShareMember
+        shareMemberService.addShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());
+        return shareList;
     }
 
     public void deletShareList(BigInteger listId,String listCreater){

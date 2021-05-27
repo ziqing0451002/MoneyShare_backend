@@ -32,7 +32,7 @@ public class ShareMemberController {
 
     @PostMapping(path = "addshareMemberLoop")
     public boolean addShareMemberLoop(@RequestParam String memberList,@RequestParam BigInteger shareListId,@RequestParam String listCreater){
-        return shareMemberService.addreShareMemberLoop(memberList,shareListId,listCreater);
+        return shareMemberService.addShareMemberLoop(memberList,shareListId,listCreater);
     }
 
     @DeleteMapping(path = "deletShareMember/{memberId}")
