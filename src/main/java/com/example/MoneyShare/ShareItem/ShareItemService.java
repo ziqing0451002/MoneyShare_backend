@@ -30,7 +30,12 @@ public class ShareItemService {
         return shareItemRepository.findShareItemByItemId(shareItemId);
     }
 
-    public boolean addShareItem(ShareItem shareItem){
+    public List<ShareItem> getShareItemByShareListId(BigInteger shareListId){
+        return  shareItemRepository.findShareItemByShareListId(shareListId);
+    }
+
+
+        public boolean addShareItem(ShareItem shareItem){
         int count = 0;
         BigInteger idInit = serialNumberMaker.IdCount(count);
         shareItem.setItemId(idInit);

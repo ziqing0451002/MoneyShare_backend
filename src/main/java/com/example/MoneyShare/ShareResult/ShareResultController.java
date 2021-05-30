@@ -22,6 +22,11 @@ public class ShareResultController {
         return shareResultService.getShareResult();
     }
 
+    @GetMapping(path = "getShareResultByShareListId/{shareListId}")
+    public List<ShareResult> getShareResultByShareListId(@PathVariable("shareListId") BigInteger shareListId){
+        return shareResultService.getShareResultByShareListId(shareListId);
+    }
+
     @PostMapping(path = "addShareResult")
     public boolean addShareResult(@RequestBody ShareResult shareResult ){
         return shareResultService.addShareResult(shareResult);

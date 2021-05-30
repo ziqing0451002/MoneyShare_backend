@@ -129,6 +129,14 @@ public class ShareMemberService {
         }
     }
 
+    public void deletShareMemberByShareListId(BigInteger shareListId){
+        List<ShareMember> shareMembers = shareMemberRepository.findShareMemberByShareListId(shareListId);
+        for (ShareMember shareMember : shareMembers) {
+            shareMemberRepository.deleteById(shareMember.getMemberId());
+        }
+    }
+
+
     @Transactional
     public void upShareMemberInfo(BigInteger memberId, String memberName, BigInteger shareListId){
         ShareMember shareMember  = shareMemberRepository.findById(memberId).orElseThrow(
@@ -150,6 +158,10 @@ public class ShareMemberService {
 
     //想辦法產出計算後的結果，set進去ShareResult
     public boolean resultCalculate(BigInteger shareListId){
+        //如果重新計算結果，就先將原有的sgareMember和ShareResult刪除
+        deletShareMemberByShareListId(shareListId);
+        shareResultService.deletShareResultByShareListId(shareListId);
+
         //送出shareList表單，產生shareMember
         ShareList shareList =  shareListRepository.findShareListByListId(shareListId);
         addShareMemberLoop(shareList.getListMember(),shareList.getListId(),shareList.getListCreater());

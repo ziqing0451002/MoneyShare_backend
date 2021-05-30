@@ -27,6 +27,11 @@ public class ShareItemController {
         return shareItemService.getShareItemById(itemId);
     }
 
+    @GetMapping(path = "getShareItemByShareListId/{shareListId}")
+    public List<ShareItem> getShareItemByShareListId(@PathVariable("shareListId") BigInteger shareListId){
+        return shareItemService.getShareItemByShareListId(shareListId);
+    }
+
     @GetMapping(path = "submitShareItem/{listId}")
     public List<ShareItem> submitShareItem(@PathVariable("listId") BigInteger listId ){
         return shareItemService.submitShareItem(listId);

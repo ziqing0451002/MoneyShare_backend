@@ -3,6 +3,7 @@ package com.example.MoneyShare.ShareResult;
 import com.example.MoneyShare.CommentModel.SerialNumberMaker;
 import com.example.MoneyShare.ShareMember.ShareCount;
 import com.example.MoneyShare.ShareList.ShareListService;
+import com.example.MoneyShare.ShareMember.ShareMember;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -26,6 +27,10 @@ public class ShareResultService {
 
     public List<ShareResult> getShareResult(){
         return shareResultRepository.findAll();
+    }
+
+    public List<ShareResult> getShareResultByShareListId(BigInteger shareListId){
+        return shareResultRepository.findShareResultByShareListId(shareListId);
     }
 
     public boolean addShareResultFromCalculate(ShareCount shareCount){
@@ -94,6 +99,13 @@ public class ShareResultService {
             throw new IllegalStateException("限發起人刪除");
         }else{
             shareResultRepository.deleteById(shareListId);
+        }
+    }
+
+    public void deletShareResultByShareListId(BigInteger shareListId){
+        List<ShareResult> shareResults = shareResultRepository.findShareResultByShareListId(shareListId);
+        for (ShareResult shareResult : shareResults) {
+            shareResultRepository.deleteById(shareResult.getResultId());
         }
     }
 }
